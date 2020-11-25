@@ -16,14 +16,14 @@ jobs:
     - uses: coursier/cache-action@v5
     - run: sbt -v test makeSite
     - uses: webfactory/ssh-agent@v0.4.1
-      if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/github-actions' && github.event_name == 'push' }}
+      if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       with:
         ssh-private-key: ${{ secrets.DEPLOY_KEY_1 }}
     - name: Push to gh-pages
-      if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/github-actions' && github.event_name == 'push' }}
+      if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       run: |
         git config --global user.email "74864734+foundweekends-bot[bot]@users.noreply.github.com"
         git config --global user.name "foundweekends-bot[bot]"
         # https://github.com/sbt/sbt-ghpages/commit/cbedd8edb8
-        export SBT_GHPAGES_COMMIT_MESSAGE="auto commit on CI https://github.com/foundweekends/foundweekends.github.io/commit/${{ github.sha }}"
+        export SBT_GHPAGES_COMMIT_MESSAGE="auto commit on CI https://github.com/foundweekends/foundweekends-website/commit/${{ github.sha }}"
         sbt -v ghpagesPushSite
