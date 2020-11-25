@@ -1,6 +1,0 @@
-language: scala
-sudo: false
-jdk:
-- oraclejdk7
-script:
-- sbt makeSite
