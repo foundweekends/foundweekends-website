@@ -1,7 +1,7 @@
 name: scala-steward
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   schedule:
   - cron: '0 23 * * *'
 jobs:
