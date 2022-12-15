@@ -8,6 +8,7 @@ jobs:
   test:
     timeout-minutes: 20
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'foundweekends' }}
     steps:
     - uses: actions/setup-java@c3ac5dd0ed8db40fedb61c32fbe677e6b355e94c # v3.8.0
       with:
@@ -17,11 +18,11 @@ jobs:
     - uses: coursier/cache-action@60455feeb7a70875fc37e0228606262bbf361990 # v6.4.1
     - run: sbt -v test makeSite
     - uses: webfactory/ssh-agent@836c84ec59a0e7bc0eabc79988384eb567561ee2 # v0.7.0
-      if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+      if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       with:
         ssh-private-key: ${{ secrets.DEPLOY_KEY_1 }}
     - name: Push to gh-pages
-      if: ${{ !github.event.repository.fork && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+      if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       run: |
         git config --global user.email "74864734+foundweekends-bot[bot]@users.noreply.github.com"
         git config --global user.name "foundweekends-bot[bot]"
