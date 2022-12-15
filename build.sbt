@@ -7,7 +7,7 @@ lazy val root = (project in file(".")).
     organization := "org.foundweekends",
     name := "foundweekends_website",
     git.remoteRepo := "git@github.com:foundweekends/foundweekends.github.io.git",
-    GitKeys.gitBranch in ghpagesUpdatedRepository := Some("master"),
+    ghpagesUpdatedRepository / GitKeys.gitBranch := Some("master"),
     // This task is responsible for updating the master branch on some temp dir.
     // On the branch there are files that was generated in some other ways such as:
     // - CNAME file
