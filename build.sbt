@@ -21,8 +21,9 @@ lazy val root = (project in file(".")).
       val r = GitKeys.gitRunner.value
       gitRemoveFiles(repo, (repo * "*.html").get.toList, r, s)
       val mappings =  for {
-        (file, target) <- siteMappings.value if siteInclude(file)
+        (file, target) <- (Pamflet / Keys.mappings).value if siteInclude(file)
       } yield (file, repo / target)
+      assert(mappings.nonEmpty)
       IO.copy(mappings)
       repo
     }
