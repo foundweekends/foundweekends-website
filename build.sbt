@@ -19,7 +19,8 @@ lazy val root = (project in file(".")).
       val repo = ghpagesUpdatedRepository.value
       val s = streams.value
       val r = GitKeys.gitRunner.value
-      gitRemoveFiles(repo, (repo * "*.html").get.toList, r, s)
+      r.apply(("rm" :: "-r" :: "-f" :: "offline" :: Nil) :_*)(repo, s.log)
+      gitRemoveFiles(repo, (repo ** "*.html").get.toList, r, s)
       val mappings =  for {
         (file, target) <- (Pamflet / Keys.mappings).value if siteInclude(file)
       } yield (file, repo / target)
