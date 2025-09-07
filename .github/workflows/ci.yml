@@ -17,17 +17,21 @@ jobs:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
     - uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c # v6.4.7
     - uses: sbt/setup-sbt@v1
-    - run: rm -rf "$HOME/.sbt/ghpages"
     - run: sbt -v test makeSite
-    - uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
-      if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+    - id: generate_token
+      uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
+      if: ${{ github.repository_owner == 'foundweekends' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       with:
-        ssh-private-key: ${{ secrets.DEPLOY_KEY_1 }}
+        app-id: 89697
+        private-key: ${{ secrets.FOUNDWEEKENDS_BOT_KEY }}
+        owner: "foundweekends"
+        repositories: "foundweekends.github.io"
     - name: Push to gh-pages
-      if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
-      run: |
-        git config --global user.email "74864734+foundweekends-bot[bot]@users.noreply.github.com"
-        git config --global user.name "foundweekends-bot[bot]"
-        # https://github.com/sbt/sbt-ghpages/commit/cbedd8edb8
-        export SBT_GHPAGES_COMMIT_MESSAGE="auto commit on CI https://github.com/foundweekends/foundweekends-website/commit/${{ github.sha }}"
-        sbt -v ghpagesPushSite
+      if: ${{ github.repository_owner == 'foundweekends' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+      uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8 # v4.7.3
+      with:
+        repository-name: "foundweekends.github.io"
+        token: ${{ steps.generate_token.outputs.token }}
+        branch: master
+        folder: target/site
+        clean: true
