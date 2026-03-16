@@ -13,7 +13,7 @@ jobs:
     - uses: sbt/setup-sbt@v1
     - name: Generate token
       id: generate_token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@v3
       with:
         app-id: 89697
         private-key: ${{ secrets.FOUNDWEEKENDS_BOT_KEY }}
