@@ -2,6 +2,7 @@ lazy val root = (project in file(".")).
   settings(
     organization := "org.foundweekends",
     name := "foundweekends_website",
+    autoScalaLibrary := false,
     InputKey[Unit]("makeSite") := {
       val output = file("site")
       IO.delete(output)
